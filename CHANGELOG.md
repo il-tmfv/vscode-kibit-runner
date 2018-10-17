@@ -1,7 +1,6 @@
-# Change Log
-All notable changes to the "vscode-kibit-runner" extension will be documented in this file.
+## [0.0.2] - 2018-10-17
+### Fixed
+- Fix changelog
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
+## [0.0.1] - 2018-10-17
 - Initial release
