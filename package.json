@@ -2,7 +2,7 @@
     "name": "vscode-kibit-runner",
     "displayName": "Kibit Runner",
     "description": "Kibit runner for vscode",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/il-tmfv/vscode-kibit-runner"
@@ -15,6 +15,7 @@
         "Linters"
     ],
     "activationEvents": [
+        "onLanguage:clojure",
         "onCommand:vscode-kibit-runner.runKibit"
     ],
     "main": "./out/extension",
@@ -29,6 +30,12 @@
                 "command": "vscode-kibit-runner.clear",
                 "title": "Clear kibit warnings",
                 "category": "Kibit runner"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "vscode-kibit-runner.runKibit",
+                "key": "alt+shift+k"
             }
         ]
     },

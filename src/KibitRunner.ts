@@ -9,7 +9,7 @@ export default class KibitRunner {
 
   constructor() {
     this.errColl = vscode.languages.createDiagnosticCollection('KibitEvaluationErrors');
-    this.statusBarItem.text = "Kibit is running";
+    this.statusBarItem.text = "$(clock) Kibit is running";
   }
 
   public dispose() {
