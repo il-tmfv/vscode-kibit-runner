@@ -14,6 +14,7 @@ export default class KibitRunner {
 
   public dispose() {
     this.statusBarItem.dispose();
+    this.clear();
   }
 
   public clear() {
