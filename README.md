@@ -15,9 +15,3 @@ Add `[lein-kibit "0.1.6"]` to `:plugins` section in your `project.clj` or to you
 
 * `Kibit runner: Run kibit on current file`
 * `Kibit runner: Clear kibit warnings`
-
-## Release Notes
-
-### 0.0.1
-
-Initial release
