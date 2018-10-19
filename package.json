@@ -2,7 +2,7 @@
     "name": "vscode-kibit-runner",
     "displayName": "Kibit Runner",
     "description": "Kibit runner for vscode",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/il-tmfv/vscode-kibit-runner"
@@ -24,6 +24,11 @@
             {
                 "command": "vscode-kibit-runner.runKibit",
                 "title": "Run kibit on current file",
+                "category": "Kibit runner"
+            },
+            {
+                "command": "vscode-kibit-runner.runAndReplaceKibit",
+                "title": "Run kibit on current file and let it do replaces",
                 "category": "Kibit runner"
             },
             {

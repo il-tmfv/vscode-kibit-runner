@@ -1,3 +1,7 @@
+## [0.2.0] - 2018-10-19
+### Added
+- Add command "runAndReplaceKibit"
+
 ## [0.1.1] - 2018-10-19
 ### Added
 - Add handling of stderr

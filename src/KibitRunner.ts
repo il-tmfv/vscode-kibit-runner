@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { normalize } from 'path';
+import { countReplaces } from './utils';
 import { spawn } from 'child_process';
 
 export default class KibitRunner {
@@ -20,9 +20,17 @@ export default class KibitRunner {
     this.errColl.clear();
   }
 
-  private parseStdoutOutput(output: string, editor: vscode.TextEditor) {
+  private parseStdoutOutput(output: string, editor: vscode.TextEditor, doReplace: boolean) {
     const messages = output.split(/^$/gm).map(x => x.trim()).filter(x => x);
-    vscode.window.showInformationMessage(`Kibit found ${messages.length} places to improve`);
+
+    if (doReplace) {
+      vscode.window.showInformationMessage(`Kibit made ${countReplaces(output)} replace(s)`);
+      this.clear();
+      return;
+    } else {
+      vscode.window.showInformationMessage(`Kibit found ${messages.length} places to improve`);
+    }
+
     const suggestions = [];
 
     messages.forEach(message => {
@@ -47,14 +55,20 @@ export default class KibitRunner {
     }
   }
 
-  public run(editor: vscode.TextEditor) {
+  public run(editor: vscode.TextEditor, doReplace = false) {
     this.clear();
     this.statusBarItem.show();
     const fileName = editor.document.fileName;
 
     let stdoutOutput = "";
     let stderrOutput = "";
-    let kibit = spawn("lein", ["kibit", fileName]);
+    const kibitArgs = ["kibit", fileName];
+
+    if (doReplace) {
+      kibitArgs.push("--replace");
+    }
+
+    let kibit = spawn("lein", kibitArgs);
     kibit.stdout.setEncoding("utf8");
     kibit.stderr.setEncoding("utf8");
 
@@ -76,7 +90,7 @@ export default class KibitRunner {
 
     kibit.on("close", () => {
       this.parseStderrOutput(stderrOutput, editor);
-      this.parseStdoutOutput(stdoutOutput, editor);
+      this.parseStdoutOutput(stdoutOutput, editor, doReplace);
       this.statusBarItem.hide();
     })
   }

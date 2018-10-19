@@ -7,7 +7,18 @@ import KibitRunner from './KibitRunner';
 export function activate(context: vscode.ExtensionContext) {
     const kibitRunner = new KibitRunner();
 
-    let runCommand = vscode.commands.registerCommand('vscode-kibit-runner.runKibit', () => {
+    function runAndReplaceCommand() {
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+          return; // No open text editor
+        }
+
+        if (editor.document.languageId === "clojure") {
+            kibitRunner.run(editor, true);
+        }
+    }
+
+    function runCommand() {
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
           return; // No open text editor
@@ -16,9 +27,9 @@ export function activate(context: vscode.ExtensionContext) {
         if (editor.document.languageId === "clojure") {
             kibitRunner.run(editor);
         }
-    });
+    }
 
-    let clearCommand = vscode.commands.registerCommand('vscode-kibit-runner.clear', () => {
+    function clearCommand() {
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
           return; // No open text editor
@@ -27,10 +38,11 @@ export function activate(context: vscode.ExtensionContext) {
         if (editor.document.languageId === "clojure") {
             kibitRunner.clear();
         }
-    });
+    }
 
-    context.subscriptions.push(runCommand);
-    context.subscriptions.push(clearCommand);
+    context.subscriptions.push(vscode.commands.registerCommand('vscode-kibit-runner.runKibit', runCommand));
+    context.subscriptions.push(vscode.commands.registerCommand('vscode-kibit-runner.runAndReplaceKibit', runAndReplaceCommand));
+    context.subscriptions.push(vscode.commands.registerCommand('vscode-kibit-runner.clear', clearCommand));
     context.subscriptions.push(kibitRunner);
 }
 
