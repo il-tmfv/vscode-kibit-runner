@@ -1,3 +1,7 @@
+## [0.1.1] - 2018-10-19
+### Added
+- Add handling of stderr
+
 ## [0.1.0] - 2018-10-17
 ### Added
 - Keybinding for run command

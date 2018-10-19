@@ -3,7 +3,6 @@ import { normalize } from 'path';
 import { spawn } from 'child_process';
 
 export default class KibitRunner {
-  private output: string = "";
   private errColl: vscode.DiagnosticCollection = null;
   private statusBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 
@@ -19,10 +18,9 @@ export default class KibitRunner {
 
   public clear() {
     this.errColl.clear();
-    this.output = "";
   }
 
-  private parseOutput(output: string, editor: vscode.TextEditor) {
+  private parseStdoutOutput(output: string, editor: vscode.TextEditor) {
     const messages = output.split(/^$/gm).map(x => x.trim()).filter(x => x);
     vscode.window.showInformationMessage(`Kibit found ${messages.length} places to improve`);
     const suggestions = [];
@@ -43,14 +41,22 @@ export default class KibitRunner {
     this.errColl.set(editor.document.uri, suggestions);
   }
 
+  private parseStderrOutput(output: string, editor: vscode.TextEditor) {
+    if (output.length != 0) {
+      vscode.window.showErrorMessage("Kibit error: " + output);
+    }
+  }
+
   public run(editor: vscode.TextEditor) {
     this.clear();
     this.statusBarItem.show();
     const fileName = editor.document.fileName;
 
-    let output = "";
+    let stdoutOutput = "";
+    let stderrOutput = "";
     let kibit = spawn("lein", ["kibit", fileName]);
     kibit.stdout.setEncoding("utf8");
+    kibit.stderr.setEncoding("utf8");
 
     kibit.on("error", (error: { message, code }) => {
       vscode.window.showErrorMessage("Kibit error: " + error.message);
@@ -58,12 +64,19 @@ export default class KibitRunner {
 
     kibit.stdout.on("data", (data) => {
       if (data.length != 0) {
-        output += data.toString();
+        stdoutOutput += data.toString();
+      }
+    });
+
+    kibit.stderr.on("data", (data) => {
+      if (data.length != 0) {
+        stderrOutput += data.toString();
       }
     });
 
     kibit.on("close", () => {
-      this.parseOutput(output, editor);
+      this.parseStderrOutput(stderrOutput, editor);
+      this.parseStdoutOutput(stdoutOutput, editor);
       this.statusBarItem.hide();
     })
   }
