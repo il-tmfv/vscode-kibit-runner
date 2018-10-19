@@ -2,7 +2,7 @@
     "name": "vscode-kibit-runner",
     "displayName": "Kibit Runner",
     "description": "Kibit runner for vscode",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "repository": {
         "type": "git",
         "url": "https://github.com/il-tmfv/vscode-kibit-runner"
